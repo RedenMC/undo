@@ -127,19 +127,6 @@ fun initHeartBeat() {
 
 fun Thread(name: String, function: () -> Unit) = Thread(function, name)
 
-class ClientMetadataReq(
-    val online_mode: Boolean,
-    val uuid: UUID?,
-    val name: String,
-    val mcversion: String,
-    val servers: List<Server>
-) {
-    class Server(
-        val name: String,
-        val ip: String
-    )
-}
-
 private var usedTimes = 0
 
 private fun requestFollow() {
@@ -209,6 +196,7 @@ fun reportOnlineMC(client: MinecraftClient) {
                 val cpus: Int,
                 val mc_version: String,
                 val reden_version: String,
+                val versionType: String,
                 val mods: List<ModData>,
                 val servers: List<Map<String, String>>
             )
@@ -224,6 +212,7 @@ fun reportOnlineMC(client: MinecraftClient) {
                 Runtime.getRuntime().availableProcessors(),
                 MinecraftVersion.create().name,
                 FabricLoader.getInstance().getModContainer("reden").get().metadata.version.toString(),
+                "undo-fork",
                 if (data_IDENTIFICATION.booleanValue) FabricLoader.getInstance().allMods.map {
                     ModData(
                         it.metadata.name,

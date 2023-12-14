@@ -35,9 +35,6 @@ class GuiConfigs(parent: Screen? = null): GuiConfigsBase(
     }
     override fun getConfigs(): MutableList<ConfigOptionWrapper> = when (tab) {
         ConfigGuiTab1.GENERIC -> ConfigOptionWrapper.createFor(GENERIC_TAB)
-        ConfigGuiTab1.RVC -> ConfigOptionWrapper.createFor(RVC_TAB)
-        ConfigGuiTab1.MICRO_TICK -> ConfigOptionWrapper.createFor(MICRO_TICK_TAB)
-        ConfigGuiTab1.SUPER_RIGHT -> ConfigOptionWrapper.createFor(SUPER_RIGHT_TAB)
         ConfigGuiTab1.DEBUG -> ConfigOptionWrapper.createFor(DEBUG_TAB)
     }
     override fun useKeybindSearch() = true
@@ -46,9 +43,6 @@ class GuiConfigs(parent: Screen? = null): GuiConfigsBase(
     }
     enum class ConfigGuiTab(private val translationKey: String) {
         GENERIC("reden.widget.config.generic"),
-        RVC("reden.widget.config.rvc"),
-        MICRO_TICK("reden.widget.config.micro_tick"),
-        SUPER_RIGHT("reden.widget.config.super_right"),
         DEBUG("reden.widget.config.debug"),
         ;
 

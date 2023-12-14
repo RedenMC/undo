@@ -2,10 +2,6 @@ buildscript {
     repositories {
         jcenter()
     }
-    dependencies {
-        //Check for the latest version here: http://plugins.gradle.org/plugin/com.jfrog.artifactory
-        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:5.1.10"
-    }
 }
 
 plugins {
@@ -18,57 +14,7 @@ plugins {
     id "com.jfrog.artifactory" version "5.1.10"
 }
 
-ext {
-    Map<String, String> environmentMap = System.getenv()
-
-    isOnGithubActions = {
-        return environmentMap.GITHUB_ACTIONS == "true"
-    }
-
-    getGitHubActionID = {
-        return environmentMap.GITHUB_RUN_NUMBER
-    }
-
-    getVersionType = {
-        switch (environmentMap.REDEN_BUILD_TYPE) {
-            case "RELEASE":
-                return "stable"
-            case "BETA":
-                return "beta"
-            default:
-                return "dev"
-        }
-    }
-
-    getVersionPatch = { List paths ->
-        if (grgit == null) {
-            return 0
-        }
-
-        List latestCommits = paths.isEmpty() ? grgit.log() : grgit.log(paths: paths)
-        return latestCommits.size()
-    }
-
-    getVersionGit = { List paths ->
-        if (grgit == null) {
-            return "nogit"
-        }
-
-        List latestCommits = paths.isEmpty() ? grgit.log(maxCommits: 1) : grgit.log(paths: paths, maxCommits: 1)
-        return latestCommits.isEmpty() ? "uncommited" : "${latestCommits.get(0).id.substring(0, 7)}"
-    }
-
-    getModVersion = {
-        if (isOnGithubActions() && environmentMap.REDEN_BUILD_TYPE == "BETA") {
-            return "${project.mod_version}.${getVersionPatch([])}+${getVersionGit([])}-${getVersionType()}+dev-ci-build.${getGitHubActionID()}"
-        } else {
-            return "${project.mod_version}.${getVersionPatch([])}+${getVersionGit([])}-${getVersionType()}"
-        }
-    }
-}
-
-//setVersion(project.getModVersion())
-version = "${project.mod_version}+1.20.1-stable"
+version = "project.mod_version"
 group = project.maven_group
 
 allprojects {
@@ -128,7 +74,6 @@ dependencies {
     //include(implementation("org.bouncycastle:bcprov-jdk18on:1.76"))
     //include(implementation("org.bouncycastle:bcpg-jdk18on:1.76"))
     include(implementation("com.squareup.okhttp3:okhttp:4.11.0"))
-    include(implementation("org.eclipse.jgit:org.eclipse.jgit:6.6.0.202305301015-r"))
     include(implementation("com.squareup.okio:okio-jvm:3.2.0"))
     modApi "curse.maven:litematica-308892:4626718"
     modApi "curse.maven:tweakeroo-297344:4623488"
@@ -186,17 +131,6 @@ publishing {
                 username = project.artifactory_user
                 password = project.artifactory_password
             }
-        }
-    }
-}
-
-artifactory {
-    contextUrl = "https://maven.starlight.cool/artifactory"
-    publish {
-        repository {
-            repoKey = 'gradle-dev-local'
-            username = project.artifactory_user
-            password = project.artifactory_password
         }
     }
 }

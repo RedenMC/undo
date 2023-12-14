@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "reden",
+  "id": "reden-undo",
   "version": "${version}",
 
-  "name": "Reden is What We Make",
-  "description": "Redstone EDEN!",
+  "name": "Undo & Redo feature from Reden",
+  "description": "Note: This is not officially supported by Reden.",
   "authors": [
     {
       "name": "zly2006",
@@ -49,6 +49,9 @@
     "fabric-language-kotlin": "*",
     "carpet": "*",
     "owo": "*"
+  },
+  "breaks": {
+    "reden": "*"
   },
   "custom": {
     "reden": {

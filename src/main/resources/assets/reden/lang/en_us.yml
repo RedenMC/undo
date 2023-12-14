@@ -1,14 +1,4 @@
 reden:
-  debugger:
-    tick_stage:
-      entity: 'Entity/%s: %s'
-      block_entity: 'BlockEntity at %s'
-      nc_update_6: NC Update 6 Sides
-      pp_update: Post-Placement
-      nc_update: Neighbor-Changed
-      block_event: Block Event at %s, block %s, type %s, data %s
-      nc_update_with_source: Neighbor-Changed
-
   widget:
     privacy:
       desc: |
@@ -27,9 +17,6 @@ reden:
     config:
       debug: Debug
       generic: Generic
-      micro_tick: Micro Tick
-      rvc: RVC
-      super_right: Super Right
       title: Reden Config
       sponsor: Sponsors
 
@@ -38,36 +25,6 @@ reden:
 
     title:
       commandHotkeyListEdit: Edit command list
-
-    rvc:
-      hud:
-        selected: "Selected: %s"
-        selected_nothing: "Selected: Nothing"
-        trackpoints:
-          .: "Trackpoints: "
-          tracking: "%s Tracking"
-          ignoring: "%s Ignoring"
-      structure:
-        export:
-          litematica: Export to Litematica
-        name: "Name: %s"
-        block_count: "%s blocks"
-        entity_count: "%s entities"
-        scheduled_tick_unstable: |
-          This structure contains scheduled ticks or block events, which may cause unstable behavior.
-
-    chat:
-      about: About SuperRight Chat
-      copy: Copy
-      copy_click_command: Copy Click Command
-      copy_click_file: Copy Click File
-      copy_hover_raw: Copy Hover Raw
-      copy_hover_uuid: Copy Hover UUID
-      copy_raw: Copy Raw
-      copy_url: Copy URL
-      give_hover_item: Give Hover Item
-      copied: Copied
-      done: Done
 
   feature:
     undo:

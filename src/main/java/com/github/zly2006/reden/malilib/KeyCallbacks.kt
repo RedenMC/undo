@@ -5,22 +5,17 @@ import com.github.zly2006.reden.Sounds
 import com.github.zly2006.reden.access.PlayerData.Companion.data
 import com.github.zly2006.reden.access.ServerData.Companion.serverData
 import com.github.zly2006.reden.gui.CreditScreen
-import com.github.zly2006.reden.mixinhelper.StructureBlockHelper
 import com.github.zly2006.reden.network.Undo
 import com.github.zly2006.reden.render.BlockBorder
 import com.github.zly2006.reden.report.onFunctionUsed
 import com.github.zly2006.reden.sponsor.SponsorScreen
-import com.github.zly2006.reden.transformers.RedenMixinExtension
 import com.github.zly2006.reden.utils.red
 import com.github.zly2006.reden.utils.sendMessage
 import com.github.zly2006.reden.utils.toBlockPos
 import com.github.zly2006.reden.utils.translateMessage
 import fi.dy.masa.malilib.gui.GuiConfigsBase
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
-import net.minecraft.block.entity.StructureBlockBlockEntity
-import net.minecraft.block.enums.StructureBlockMode
 import net.minecraft.client.MinecraftClient
-import net.minecraft.network.packet.c2s.play.UpdateStructureBlockC2SPacket
 import net.minecraft.sound.SoundCategory
 import net.minecraft.text.Text
 import net.minecraft.world.GameMode
@@ -96,58 +91,6 @@ fun configureKeyCallbacks(mc: MinecraftClient) {
         }
         return@setCallback false
     }
-    STRUCTURE_BLOCK_LOAD.keybind.setCallback { _, _ ->
-        onFunctionUsed("structure_block.load")
-        if (StructureBlockHelper.isValid) {
-            val structureBlock = mc.world!!.getBlockEntity(StructureBlockHelper.lastUsed!!) as StructureBlockBlockEntity
-            structureBlock.mode = StructureBlockMode.LOAD
-            mc.networkHandler?.sendPacket(
-                UpdateStructureBlockC2SPacket(
-                    structureBlock.pos,
-                    StructureBlockBlockEntity.Action.LOAD_AREA,
-                    structureBlock.mode,
-                    structureBlock.templateName,
-                    structureBlock.offset,
-                    structureBlock.size,
-                    structureBlock.mirror,
-                    structureBlock.rotation,
-                    structureBlock.metadata,
-                    structureBlock.shouldIgnoreEntities(),
-                    structureBlock.shouldShowAir(),
-                    structureBlock.shouldShowBoundingBox(),
-                    structureBlock.integrity,
-                    structureBlock.seed
-                )
-            )
-        }
-        true
-    }
-    STRUCTURE_BLOCK_SAVE.keybind.setCallback { _, _ ->
-        onFunctionUsed("structure_block.save")
-        if (StructureBlockHelper.isValid) {
-            val structureBlock = mc.world!!.getBlockEntity(StructureBlockHelper.lastUsed!!) as StructureBlockBlockEntity
-            structureBlock.mode = StructureBlockMode.SAVE
-            mc.networkHandler?.sendPacket(
-                UpdateStructureBlockC2SPacket(
-                    structureBlock.pos,
-                    StructureBlockBlockEntity.Action.SAVE_AREA,
-                    structureBlock.mode,
-                    structureBlock.templateName,
-                    structureBlock.offset,
-                    structureBlock.size,
-                    structureBlock.mirror,
-                    structureBlock.rotation,
-                    structureBlock.metadata,
-                    structureBlock.shouldIgnoreEntities(),
-                    structureBlock.shouldShowAir(),
-                    structureBlock.shouldShowBoundingBox(),
-                    structureBlock.integrity,
-                    structureBlock.seed
-                )
-            )
-        }
-        true
-    }
     SPONSOR_SCREEN_KEY.keybind.setCallback { _, _ ->
         mc.setScreen(SponsorScreen())
         true
@@ -165,10 +108,6 @@ fun configureKeyCallbacks(mc: MinecraftClient) {
             "reden.widget.config.title") {
             override fun getConfigs() = ConfigOptionWrapper.createFor(getAllOptions())
         })
-        true
-    }
-    DEBUG_EXPORT_MIXINS.keybind.setCallback { _, _ ->
-        RedenMixinExtension.exportClasses(mc.runDirectory.resolve("reden-mixins").toPath())
         true
     }
 }
