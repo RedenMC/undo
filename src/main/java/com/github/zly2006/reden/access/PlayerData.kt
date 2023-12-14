@@ -120,7 +120,7 @@ ${data.map { "${BlockPos.fromLong(it.key).toShortString()} = ${it.value.state}" 
     ) : UndoRedoRecord(id, lastChangedTick, entities, data) {
         var notified = false
 
-        enum class Cause(message: Text) {
+        enum class Cause(val message: Text) {
             BREAK_BLOCK(Text.translatable("reden.feature.undo.cause.break_block")),
             USE_BLOCK(Text.translatable("reden.feature.undo.cause.use_block")),
             USE_ITEM(Text.translatable("reden.feature.undo.cause.use_item")),
@@ -128,7 +128,6 @@ ${data.map { "${BlockPos.fromLong(it.key).toShortString()} = ${it.value.state}" 
             ATTACK_ENTITY(Text.translatable("reden.feature.undo.cause.attack_entity")),
             COMMAND(Text.translatable("reden.feature.undo.cause.command")),
             LITEMATICA_TASK(Text.translatable("reden.feature.undo.cause.litematica_task")),
-            PROJECTILE(Text.translatable("reden.feature.undo.cause.projectile")),
             UNKNOWN(Text.translatable("reden.feature.undo.cause.unknown"))
         }
     }

@@ -7,6 +7,9 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.server.MinecraftServer
 import java.util.*
 
+/**
+ * Note: in this fork it is client-side only.
+ */
 class ServerData(
     val version: Version,
     mcServer: MinecraftServer?
