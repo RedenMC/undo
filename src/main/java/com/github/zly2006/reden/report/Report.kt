@@ -71,7 +71,7 @@ fun doHeartHeat() {
                 it.profile.name,
                 it.profile.id.toString(),
                 it.latency,
-                it.gameMode.name,
+                it.gameMode!!.name,
             ) }
         } else {
             server.playerManager.playerList.map {
@@ -130,25 +130,6 @@ fun Thread(name: String, function: () -> Unit) = Thread(function, name)
 private var usedTimes = 0
 
 private fun requestFollow() {
-    if (!ALLOW_SOCIAL_FOLLOW.booleanValue) return
-    val mc = MinecraftClient.getInstance()
-    val text = Text.literal(
-        if (mc.languageManager.language == "zh_cn")
-            "你已经使用本mod的功能$usedTimes 次了，如果觉得好用的话，可以点击关注一下作者的B站哦！"
-        else
-            "You have used this mod $usedTimes times. If you like it, please click to follow the author's Youtube!"
-    ).styled {
-        it.withColor(0x00ff00).withClickEvent(
-            ClickEvent(
-                ClickEvent.Action.OPEN_URL,
-                if (mc.languageManager.language == "zh_cn")
-                    "https://space.bilibili.com/1545239761"
-                else
-                    "https://www.youtube.com/@guratory"
-            )
-        )
-    }
-    mc.player?.sendMessage(text)
 }
 
 private fun requestDonate() {

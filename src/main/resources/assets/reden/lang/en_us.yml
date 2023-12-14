@@ -50,29 +50,8 @@ reden:
       unknown_status: Unknown status
 
   config:
-    # ===== Generic =====
     redenConfigKey:
       .: redenConfigKey
-      comment: |-
-
-    selectionTool:
-      .: selectionTool
-      comment: |-
-
-    hudPosition:
-      .: hudPosition
-      comment: |-
-
-    allowCopyrightCheck:
-      .: allowCopyrightCheck
-      comment: |-
-
-    securityCommit:
-      .: securityCommit
-      comment: |-
-
-    noTimeOut:
-      .: noTimeOut
       comment: |-
 
     rollbackKey:
@@ -87,170 +66,11 @@ reden:
       .: redoKey
       comment: |-
 
-    undoSupportLitematicaOperation:
-      .: undoSupportLitematicaOperation
-      comment: |-
-
     undoCheatingOnly:
       .: undoCheatingOnly
       comment: |-
         Only enable undo feature if cheating enabled.
 
-    solidFaceRenderer:
-      .: solidFaceRenderer
-      comment: |-
-        Draw markers on targeted solid faces. 
-
-    solidFaceShapePredicate:
-      .: solidFaceShapePredicate
-      comment: |-
-        Shape predicate type for solidFaceRenderer. Can be "full", "center" or "rigid".
-
     maxRenderDistance:
       .: maxRenderDistance
       comment: |-
-
-    # ===== Micro Tick =====
-    toggleNcBreakpoint:
-      .: toggleNcBreakpoint
-      comment: |-
-        Neighbor Changed Event
-
-    togglePpBreakpoint:
-      .: togglePpBreakpoint
-      comment: |-
-        Post Placement Event
-
-    toggleCuBreakpoint:
-      .: toggleCuBreakpoint
-      comment: |-
-        Comparator Update Event
-
-    toggleForceEntityPosSync:
-      .: toggleForceEntityPosSync
-      comment: |-
-        Force Entity Pos Sync
-
-    # ===== RVC =====
-    openRvcScreen:
-      .: openRvcScreen
-      comment: |-
-        Open RVC screen
-
-    openSelectionList:
-      .: openSelectionList
-      comment: |-
-        Open RVC selection list
-
-    rvcRecordMultiplayer:
-      .: rvcRecordMultiplayer
-      comment: |-
-        Enable RVC in multiplayer
-
-    rvcForceLocally:
-      .: rvcForceLocally
-      comment: |-
-        Force RVC to run locally even the remote server enabled RVC
-
-    # ===== Super Right =====
-    chatRightClickMenu:
-      .: chatRightClickMenu
-      comment: |-
-        Enable right click menu in chat
-
-    structureBlockLoad:
-      .: structureBlockLoad
-      comment: |-
-
-    structureBlockSave:
-      .: structureBlockSave
-      comment: |-
-
-    runCommand:
-      .: runCommand
-      comment: |-
-
-    # ===== Debug =====
-    debugLogger:
-      .: debugLogger
-      comment: |-
-        Enable debug logger
-
-    debugPacketLogger:
-      .: debugPacketLogger
-      comment: |-
-
-    debugTagBlockPos:
-      .: debugTagBlockPos
-      comment: |-
-        Tag block position
-
-    debugPreviewUndo:
-      .: debugPreviewUndo
-      comment: |-
-        Preview undo
-
-    maxChainUpdates:
-      .: maxChainUpdates
-      comment: |-
-        Max chain updates, affects after reopening
-
-    doAssertionChecks:
-      .: doAssertionChecks
-      comment: |-
-
-    undoReportUnTrackedTnt:
-      .: undoReportUnTrackedTnt
-      comment: |-
-
-    openGithubAuthScreen:
-      .: openGithubAuthScreen
-      comment: |-
-
-    githubToken:
-      .: githubToken
-      comment: |-
-        Keep it secure! You should not modify it unless you know what you are doing.
-
-    allowSocialFollow:
-      .: allowSocialFollow
-      comment: |-
-
-
-
-carpet:
-  rule:
-    redenDebuggerItemShadow:
-      desc: Enable Reden debugger for item shadowing, this can give you some necessary information for item shadowing.
-    fixInvisibleShadowingItems:
-      desc: Igna
-    redenDebuggerEnabled:
-      desc: Enable Reden debugger
-    redenDebuggerBlockUpdates:
-      desc: Enable debugging block updates
-    stackOverflowUpdates:
-      desc: |-
-        TODO
-
-    allowedUndoSizeInBytes:
-      desc: |-
-        Memory size a player can use for undo. Default is 5MB, 0 to disable, -1 for infinite.
-
-    tickBackMaxTicks:
-      desc: |-
-        Maximum ticks for tick back. Default is 100, 0 to disable.
-
-    undoEntities:
-      desc: Allow undo record entities. Default is true.
-    undoApplyingClearScheduledTicks:
-      desc: Clear all scheduled tick if that block position undoed.
-    undoScheduledTicks:
-      desc: Allow undo record scheduled ticks. Default is true.
-    redenDebuggerUpdater:
-      desc: TODO
-    realFakePlayer:
-      desc: Tick fake players in network phase, like real player but a pig.
-
-    redenDebug:
-      desc: |-
-        Enable Reden debug mode. Default is false. Used for bug report etc.

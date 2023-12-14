@@ -15,6 +15,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
+import net.minecraft.text.TranslatableText
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import java.util.*
@@ -26,13 +27,13 @@ class PlayerData(
     fun topRedo() {
         player.sendMessage(Text.of(redo.lastOrNull {
             it.data.isNotEmpty() && it.entities.isNotEmpty()
-        }?.toString()))
+        }?.toString()), false)
     }
 
     fun topUndo() {
         player.sendMessage(Text.of(undo.lastOrNull {
             it.data.isNotEmpty() && it.entities.isNotEmpty()
-        }?.toString()))
+        }?.toString()), false)
     }
 
     val canRecord: Boolean
@@ -51,7 +52,7 @@ class PlayerData(
         val blockEntity: NbtCompound?,
         val time: Int
     ) {
-        fun getMemorySize() = (blockEntity?.sizeInBytes ?: 0) + 20
+        fun getMemorySize() = 20 //todo: blockEntity
     }
 
     internal interface PlayerDataAccess {
@@ -108,7 +109,7 @@ ${data.map { "${BlockPos.fromLong(it.key).toShortString()} = ${it.value.state}" 
 
         open fun getMemorySize() = data.asSequence().map { it.value.getMemorySize() }.sum() +
                 data.size * 16 +
-                entities.map { 16 + it.value.nbt.sizeInBytes }.sum()
+                entities.map { 16 + it.value.nbt.size }.sum()
     }
 
     class UndoRecord(
@@ -121,14 +122,14 @@ ${data.map { "${BlockPos.fromLong(it.key).toShortString()} = ${it.value.state}" 
         var notified = false
 
         enum class Cause(val message: Text) {
-            BREAK_BLOCK(Text.translatable("reden.feature.undo.cause.break_block")),
-            USE_BLOCK(Text.translatable("reden.feature.undo.cause.use_block")),
-            USE_ITEM(Text.translatable("reden.feature.undo.cause.use_item")),
-            USE_ENTITY(Text.translatable("reden.feature.undo.cause.use_entity")),
-            ATTACK_ENTITY(Text.translatable("reden.feature.undo.cause.attack_entity")),
-            COMMAND(Text.translatable("reden.feature.undo.cause.command")),
-            LITEMATICA_TASK(Text.translatable("reden.feature.undo.cause.litematica_task")),
-            UNKNOWN(Text.translatable("reden.feature.undo.cause.unknown"))
+            BREAK_BLOCK(TranslatableText("reden.feature.undo.cause.break_block")),
+            USE_BLOCK(TranslatableText("reden.feature.undo.cause.use_block")),
+            USE_ITEM(TranslatableText("reden.feature.undo.cause.use_item")),
+            USE_ENTITY(TranslatableText("reden.feature.undo.cause.use_entity")),
+            ATTACK_ENTITY(TranslatableText("reden.feature.undo.cause.attack_entity")),
+            COMMAND(TranslatableText("reden.feature.undo.cause.command")),
+            LITEMATICA_TASK(TranslatableText("reden.feature.undo.cause.litematica_task")),
+            UNKNOWN(TranslatableText("reden.feature.undo.cause.unknown"))
         }
     }
 

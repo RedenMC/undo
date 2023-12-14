@@ -6,18 +6,21 @@ import com.github.zly2006.reden.mixinhelper.UpdateMonitorHelper;
 import com.github.zly2006.reden.utils.DebugKt;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Ownable;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ProjectileEntity.class)
-public abstract class MixinProjectileEntity extends Entity implements UndoableAccess, Ownable {
+public abstract class MixinProjectileEntity extends Entity implements UndoableAccess {
+    @Shadow @Nullable private Entity owner;
+
     public MixinProjectileEntity(EntityType<?> type, World world) {
         super(type, world);
     }
@@ -27,7 +30,7 @@ public abstract class MixinProjectileEntity extends Entity implements UndoableAc
             at = @At("HEAD")
     )
     private void beforeHit(HitResult hitResult, CallbackInfo ci) {
-        if (this.getOwner() instanceof ServerPlayerEntity player) {
+        if (owner instanceof ServerPlayerEntity player) {
             UpdateMonitorHelper.pushRecord(getUndoId$reden(), () -> "projectile hit/" + getId());
         }
     }
@@ -37,7 +40,7 @@ public abstract class MixinProjectileEntity extends Entity implements UndoableAc
             at = @At("RETURN")
     )
     private void afterHit(HitResult hitResult, CallbackInfo ci) {
-        if (this.getOwner() instanceof ServerPlayerEntity player) {
+        if (owner instanceof ServerPlayerEntity player) {
             UpdateMonitorHelper.popRecord(() -> "projectile hit/" + getId());
         }
     }

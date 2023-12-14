@@ -30,7 +30,7 @@ private fun <T : IConfigBase?> ConfigBase<T>.hidden() = this.apply(HIDDEN_TAB::a
 @JvmField val UNDO_CHEATING_ONLY = RedenConfigBoolean("undoCheatingOnly", true).generic()
 @JvmField val MAX_RENDER_DISTANCE = RedenConfigInteger("maxRenderDistance", 48).generic()
 @JvmField val EASTER_EGG_RATE = RedenConfigInteger("easterEggRate", 3, 0, 100).generic()
-@JvmField val RUN_COMMAND = RedenConfigCommandHotkeyList("runCommand").generic()
+
 // Debug
 @JvmField val DEBUG_LOGGER = RedenConfigBoolean("debugLogger", false) {
     if (booleanValue) startDebugAppender()

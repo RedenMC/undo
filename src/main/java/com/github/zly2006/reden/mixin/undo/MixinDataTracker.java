@@ -17,19 +17,19 @@ public class MixinDataTracker {
     @Shadow @Final private Entity trackedEntity;
 
     @Inject(
-            method = "set(Lnet/minecraft/entity/data/TrackedData;Ljava/lang/Object;Z)V",
+            method = "set",
             at = @At("HEAD")
     )
-    private <T> void beforeDataSet(TrackedData<T> key, T value, boolean force, CallbackInfo ci) {
+    private <T> void beforeDataSet(TrackedData<T> key, T value, CallbackInfo ci) {
         if (trackedEntity.getWorld().isClient ||
                 !RedenCarpetSettings.Options.undoEntities) return;
         UpdateMonitorHelper.tryAddRelatedEntity(trackedEntity);
     }
     @Inject(
-            method = "set(Lnet/minecraft/entity/data/TrackedData;Ljava/lang/Object;Z)V",
+            method = "set",
             at = @At("RETURN")
     )
-    private <T> void afterDataSet(TrackedData<T> key, T value, boolean force, CallbackInfo ci) {
+    private <T> void afterDataSet(TrackedData<T> key, T value, CallbackInfo ci) {
         // empty
     }
 }

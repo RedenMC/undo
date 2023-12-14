@@ -2,7 +2,7 @@ package com.github.zly2006.reden.mixin.undo;
 
 import com.github.zly2006.reden.mixinhelper.UpdateMonitorHelper;
 import net.minecraft.block.BlockState;
-import net.minecraft.registry.Registry;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;

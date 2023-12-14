@@ -35,15 +35,7 @@ fun updateSponsors() {
         url("https://www.redenmc.com/api/sponsors")
     }.build()).enqueue(object : Callback {
         fun updateClient() {
-            if (isClient) {
-                val mc = MinecraftClient.getInstance()
-                val screen = mc.currentScreen
-                mc.execute {
-                    if (screen is SponsorScreen) {
-                        mc.setScreen(SponsorScreen(screen.parent, false))
-                    }
-                }
-            }
+            // todo
         }
 
         override fun onFailure(call: Call, e: IOException) {

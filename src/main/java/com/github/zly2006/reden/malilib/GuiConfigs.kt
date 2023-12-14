@@ -1,7 +1,6 @@
 package com.github.zly2006.reden.malilib
 
 import com.github.zly2006.reden.Reden
-import com.github.zly2006.reden.sponsor.SponsorScreen
 import fi.dy.masa.malilib.gui.GuiConfigsBase
 import fi.dy.masa.malilib.gui.button.ButtonGeneric
 import fi.dy.masa.malilib.util.StringUtils
@@ -27,10 +26,6 @@ class GuiConfigs(parent: Screen? = null): GuiConfigsBase(
                 }
             }
             button.width + x + 2
-        }
-        val sponsorsButton = ButtonGeneric(finalX, 26, -1, 20, StringUtils.translate("reden.widget.config.sponsor"))
-        addButton(sponsorsButton) { _, _ ->
-            client!!.setScreen(SponsorScreen(this))
         }
     }
     override fun getConfigs(): MutableList<ConfigOptionWrapper> = when (tab) {

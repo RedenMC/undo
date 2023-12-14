@@ -20,8 +20,8 @@ public class MixinScreen {
     @Inject(
             method = "handleTextClick",
             at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/option/GameOptions;getChatLinks()Lnet/minecraft/client/option/SimpleOption;"
+                    value = "FIELD",
+                    target = "Lnet/minecraft/client/option/GameOptions;chatLinks:Z"
             ),
             cancellable = true
     )

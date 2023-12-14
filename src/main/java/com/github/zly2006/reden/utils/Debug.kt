@@ -3,6 +3,8 @@ package com.github.zly2006.reden.utils
 import com.github.zly2006.reden.Reden
 import com.github.zly2006.reden.carpet.RedenCarpetSettings
 import com.github.zly2006.reden.malilib.DEBUG_LOGGER
+import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.text.Text
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.Level.DEBUG
 import org.apache.logging.log4j.Level.INFO
@@ -34,7 +36,6 @@ private val debugAppender = RollingRandomAccessFileAppender.Builder()
     .withPolicy(OnStartupTriggeringPolicy.createPolicy(1))
     .withFilePattern("logs/reden-debug-%i.log.gz")
     .setName("RedenDebugAppender")
-    .setImmediateFlush(true)
     .setFilter(object : AbstractFilter() {
         fun filterLoggers(loggerName: String): Filter.Result {
             if (loggerName.contains("FabricRegistrySync")) return Filter.Result.DENY // useless

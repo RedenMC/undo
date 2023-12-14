@@ -4,19 +4,21 @@ import com.github.zly2006.reden.Reden
 import com.github.zly2006.reden.Sounds
 import com.github.zly2006.reden.access.PlayerData.Companion.data
 import com.github.zly2006.reden.access.ServerData.Companion.serverData
-import com.github.zly2006.reden.gui.CreditScreen
 import com.github.zly2006.reden.network.Undo
 import com.github.zly2006.reden.render.BlockBorder
 import com.github.zly2006.reden.report.onFunctionUsed
-import com.github.zly2006.reden.sponsor.SponsorScreen
 import com.github.zly2006.reden.utils.red
 import com.github.zly2006.reden.utils.sendMessage
 import com.github.zly2006.reden.utils.toBlockPos
 import com.github.zly2006.reden.utils.translateMessage
 import fi.dy.masa.malilib.gui.GuiConfigsBase
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.minecraft.client.MinecraftClient
+import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.sound.SoundCategory
+import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
 import net.minecraft.world.GameMode
 import kotlin.random.Random
@@ -33,7 +35,7 @@ fun configureKeyCallbacks(mc: MinecraftClient) {
             return@setCallback false
         }
         if (mc.serverData()?.featureSet?.contains("undo") != true) {
-            mc.player?.sendMessage(Text.literal("Sorry, this server doesn't support undo.").red(), true)
+            mc.player?.sendMessage(LiteralText("Sorry, this server doesn't support undo.").red(), true)
             return@setCallback false
         }
         if (mc.interactionManager?.currentGameMode != GameMode.CREATIVE)
@@ -46,23 +48,30 @@ fun configureKeyCallbacks(mc: MinecraftClient) {
                 mc.player,
                 mc.player!!.blockPos,
                 Sounds.THE_WORLD,
-                SoundCategory.BLOCKS
+                SoundCategory.BLOCKS,
+                1.0f,
+                1.0f
             )
             undoEasterEggLock = true
             Thread {
                 Thread.sleep(2000)
                 undoEasterEggLock = false
-                ClientPlayNetworking.send(Undo(0))
+                ClientPlayNetworking.send(Undo.id, PacketByteBufs.create().apply {
+                    writeVarInt(0)
+                })
             }.start()
         }
-        else
-            ClientPlayNetworking.send(Undo(0))
+        else ClientPlayNetworking.send(Undo.id, PacketByteBufs.create().apply {
+            writeVarInt(0)
+        })
         true
     }
     REDO_KEY.keybind.setCallback { _, _ ->
         onFunctionUsed("redo")
         if (mc.interactionManager?.currentGameMode == GameMode.CREATIVE) {
-            ClientPlayNetworking.send(Undo(1))
+            ClientPlayNetworking.send(Undo.id, PacketByteBufs.create().apply {
+                writeVarInt(1)
+            })
             true
         } else false
     }
@@ -90,14 +99,6 @@ fun configureKeyCallbacks(mc: MinecraftClient) {
             return@setCallback true
         }
         return@setCallback false
-    }
-    SPONSOR_SCREEN_KEY.keybind.setCallback { _, _ ->
-        mc.setScreen(SponsorScreen())
-        true
-    }
-    CREDIT_SCREEN_KEY.keybind.setCallback { _, _ ->
-        mc.setScreen(CreditScreen())
-        true
     }
     DEBUG_VIEW_ALL_CONFIGS.keybind.setCallback { _, _ ->
         mc.setScreen(object : GuiConfigsBase(

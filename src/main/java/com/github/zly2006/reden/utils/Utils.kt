@@ -12,6 +12,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.world.ServerWorld
+import net.minecraft.text.LiteralText
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
@@ -24,11 +25,15 @@ import net.minecraft.world.World
 lateinit var server: MinecraftServer
 
 fun Vec3d.toBlockPos(): BlockPos {
-    return BlockPos.ofFloored(this)
+    return BlockPos(this)
+}
+
+fun PlayerEntity?.sendMessage(s: Text) {
+    this?.sendMessage(s, false)
 }
 
 fun PlayerEntity.sendMessage(s: String) {
-    sendMessage(Text.literal(s))
+    sendMessage(LiteralText(s))
 }
 
 fun World.setBlockNoPP(pos: BlockPos, state: BlockState, flags: Int) {

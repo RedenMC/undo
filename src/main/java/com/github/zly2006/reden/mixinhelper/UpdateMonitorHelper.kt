@@ -17,6 +17,7 @@ import com.github.zly2006.reden.mixinhelper.UpdateMonitorHelper.undoRecords
 import com.github.zly2006.reden.mixinhelper.UpdateMonitorHelper.undoRecordsMap
 import com.github.zly2006.reden.utils.debugLogger
 import com.github.zly2006.reden.utils.isClient
+import com.github.zly2006.reden.utils.sendMessage
 import com.github.zly2006.reden.utils.server
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
@@ -30,6 +31,7 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.ClickEvent
 import net.minecraft.text.HoverEvent
+import net.minecraft.text.LiteralText
 import net.minecraft.text.Style
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
@@ -150,11 +152,11 @@ object UpdateMonitorHelper {
                 recording!!.notified = true
                 val mc = MinecraftClient.getInstance()
                 mc.player?.sendMessage(
-                    Text.literal("Did you make it by mistake? Press Ctrl+Z to undo it!").formatted(Formatting.GOLD)
-                        .append(Text.literal("Click here if you don't want to see this again.").setStyle(Style.EMPTY
+                    LiteralText("Did you make it by mistake? Press Ctrl+Z to undo it!").formatted(Formatting.GOLD)
+                        .append(LiteralText("Click here if you don't want to see this again.").setStyle(Style.EMPTY
                             .withColor(Formatting.GRAY)
                             .withClickEvent(ClickEvent(ClickEvent.Action.OPEN_URL, "reden:malilib:${iEVER_USED_UNDO.name}=true"))
-                            .withHoverEvent(HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.literal("This is a feature provided by Reden Mod. Click to disable this notification.")))))
+                            .withHoverEvent(HoverEvent(HoverEvent.Action.SHOW_TEXT, LiteralText("This is a feature provided by Reden Mod. Click to disable this notification.")))))
                 )
             }
         }

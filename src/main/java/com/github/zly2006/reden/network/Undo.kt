@@ -9,34 +9,23 @@ import com.github.zly2006.reden.carpet.RedenCarpetSettings
 import com.github.zly2006.reden.mixinhelper.UpdateMonitorHelper
 import com.github.zly2006.reden.mixinhelper.UpdateMonitorHelper.modified
 import com.github.zly2006.reden.utils.debugLogger
-import com.github.zly2006.reden.utils.server
 import com.github.zly2006.reden.utils.setBlockNoPP
-import net.fabricmc.fabric.api.networking.v1.FabricPacket
-import net.fabricmc.fabric.api.networking.v1.PacketType
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.block.Block
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.SpawnReason
 import net.minecraft.entity.mob.MobEntity
 import net.minecraft.nbt.NbtCompound
-import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.tick.ChunkTickScheduler
 
 class Undo(
     val status: Int = 0
-): FabricPacket {
-    override fun getType(): PacketType<*> = pType
-    override fun write(buf: PacketByteBuf) {
-        buf.writeVarInt(status)
-    }
-
+) {
     companion object {
         val id = Reden.identifier("undo")
-        val pType = PacketType.create(id) {
-            Undo(it.readVarInt())
-        }
         private fun operate(world: ServerWorld, record: PlayerData.UndoRedoRecord, redoRecord: PlayerData.RedoRecord?) {
             record.data.forEach { (posLong, entry) ->
                 val pos = BlockPos.fromLong(posLong)
@@ -70,10 +59,8 @@ class Undo(
                     if (it.value != PlayerData.NotExistEntityEntry) {
                         val entry = it.value
                         debugLogger("undo entity ${it.key} spawning")
-                        val newEntity = entry.entity!!.spawn(world, null, { newEntity ->
-                            // Note: uuid is different from the original one, set it manually
-                            newEntity.uuid = it.key
-                        }, entry.pos, SpawnReason.COMMAND, false, false)
+                        val newEntity = entry.entity!!.spawn(world, null, null, null, entry.pos, SpawnReason.COMMAND, false, false)
+                        newEntity?.uuid = it.key
                         if (newEntity != null) {
                             newEntity.readNbt(entry.nbt)
                             redoRecord?.entities?.put(it.key, PlayerData.NotExistEntityEntry) // add entity info to redo record
@@ -114,9 +101,11 @@ class Undo(
             return null
         }
         fun register() {
-            ServerPlayNetworking.registerGlobalReceiver(pType) { packet, player, res ->
+            ServerPlayNetworking.registerGlobalReceiver(id) { server, player, _, buf, res ->
                 val view = player.data()
-                fun sendStatus(status: Int) = res.sendPacket(Undo(status))
+                fun sendStatus(status: Int) = res.sendPacket(id, PacketByteBufs.create().apply {
+                    writeVarInt(status)
+                })
                 if (!view.canRecord) {
                     sendStatus(16)
                     return@registerGlobalReceiver
@@ -127,7 +116,7 @@ class Undo(
                     // 不取消跟踪会导致undo的更改也被记录，边读边写异常
                     UpdateMonitorHelper.undoRecords.clear()
                 }
-                when (packet.status) {
+                when (buf.readVarInt()) {
                     0 -> view.undo.lastValid()?.let { undoRecord ->
                         view.undo.removeLast()
                         UpdateMonitorHelper.removeRecord(undoRecord.id) // no longer monitoring rollbacked record
@@ -148,7 +137,7 @@ class Undo(
                                     entities.clear()
                                 }
                             )
-                            operate(player.serverWorld, undoRecord, view.redo.last())
+                            operate(player.getWorld(), undoRecord, view.redo.last())
                             sendStatus(0)
                         }
                     } ?: sendStatus(2)
@@ -156,7 +145,7 @@ class Undo(
                     1 -> view.redo.lastValid()?.let {
                         view.redo.removeLast()
                         server.execute {
-                            operate(player.serverWorld, it, null)
+                            operate(player.getWorld(), it, null)
                             view.undo.add(it.undoRecord)
                             sendStatus(1)
                         }
