@@ -16,4 +16,3 @@ For more information, please check [our wiki page](https://wiki.redenmc.com/Undo
 ## Build
 
 Just run `./gradlew build` in the root directory of the project.
-
